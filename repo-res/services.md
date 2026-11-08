@@ -1,7 +1,7 @@
 # Services
 
-Services that do not follow the guidelines in the main README.md are \
-explicitly marked
+Services that do not follow the ethical guidelines in the main README.md are \
+explicitly marked, yet still allowed on this list
 
 | Service | Operational | macOS | Linux | chromium-ext | gecko-ext |
 | ------- | ----------- | ----- | ----- | ------------ | --------- |
