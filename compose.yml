@@ -9,11 +9,11 @@ services:
       - io.containers.autoupdate=image
     command:
       - -email
-      - "${HONEYGAIN_MAIL:-YOUR_HONEYGAIN_MAIL}"
+      - "${HONEYGAIN_MAIL:?error}"
       - -pass
-      - "${HONEYGAIN_PW:-YOUR_HONEYGAIN_PASSWORD}"
+      - "${HONEYGAIN_PW:?error}"
       - -device
-      - "${DEVICE_ID:-YOUR_DEVICE_ID}"
+      - "${DEVICE_ID:-UNNAMED_DEVICE}"
       - -tou-accept
 
   pawns-cli:
@@ -23,20 +23,20 @@ services:
     labels:
       - io.containers.autoupdate=image
     command:
-      - -email=${PAWNS_MAIL:-YOUR_PAWNS_MAIL}
-      - -password=${PAWNS_PW:-YOUR_PAWNS_PASSWORD}
-      - -device-name=${DEVICE_ID:-YOUR_DEVICE_ID}
-      - -device-id=${DEVICE_ID:-YOUR_DEVICE_ID}
+      - -email=${PAWNS-CLI_MAIL:?error}
+      - -password=${PAWNS-CLI_PW:?error}
+      - -device-name=${DEVICE_ID:-UNNAMED_DEVICE}
+      - -device-id=${DEVICE_ID:-UNNAMED_DEVICE}
       - -accept-tos
 
-  earnfm:
+  earnfm-client:
     image: docker.io/earnfm/earnfm-client:latest
-    container_name: earnfm
+    container_name: earnfm-client
     restart: always
     labels:
       - io.containers.autoupdate=image
     environment:
-      EARNFM_TOKEN: "${EARNFM_TK:-YOUR_EARNFM_TOKEN}"
+      EARNFM_TOKEN: "${EARNFM_TK:?error}"
 
   psclient:
     image: docker.io/packetstream/psclient:latest
@@ -45,7 +45,7 @@ services:
     labels:
       - io.containers.autoupdate=image
     environment:
-      CID: "${PACKSTRM_TK:-YOUR_PACKETSTREAM_TOKEN}"
+      CID: "${PSCLIENT_TK:?error}"
 
   snowflake-proxy:
     image: docker.io/thetorproject/snowflake-proxy:nightly
@@ -60,5 +60,7 @@ services:
       - -allow-non-tls-relay
       - -allow-proxying-to-private-addresses
       - -summary-interval
-      - 1h
+      - 3h
       - -metrics
+      - -poll-interval
+      - 2s
