@@ -1,4 +1,4 @@
-name: altruism-maxxing
+name: idle-network-worker
 
 services:
   honeygain:
@@ -64,3 +64,38 @@ services:
       - -metrics
       - -poll-interval
       - 2s
+
+  cli_v2:
+    image: docker.io/traffmonetizer/cli_v2:latest
+    container_name: cli_v2
+    restart: always
+    labels:
+      - io.containers.autoupdate=image
+    environment:
+      HOME: /var/lib/tm
+    volumes:
+      - tm-data:/var/lib/tm
+    command:
+      - --token
+      - "${TRAFFMONETIZER_TOKEN:?error}"
+      - --device-name
+      - "${DEVICE_ID:-UNNAMED_DEVICE}"
+      - start
+      - accept
+
+  myst:
+    image: docker.io/mysteriumnetwork/myst:latest
+    container_name: myst
+    restart: always
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
+    labels:
+      - io.containers.autoupdate=image
+    command:
+      - service
+      - --agreed-terms-and-conditions
+
+volumes:
+  tm-data:
+    external: false
